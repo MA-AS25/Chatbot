@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import string
 
 # Load the Excel data
 df = pd.read_excel("List.xlsx")
@@ -12,16 +13,20 @@ st.write("Ask me about a 3D printer part or function for which you would like to
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Function to get response from Excel
+
+def clean_and_tokenize(text):
+    text = str(text).lower()
+    text = text.translate(str.maketrans('', '', string.punctuation))
+    return set(text.split())
+
 def get_response(user_input):
-    user_words = set(user_input.lower().split())
+    user_words = clean_and_tokenize(user_input)
     matches = []
 
     for _, row in df.iterrows():
-        title_words = set(str(row["Title"]).lower().split())
-        part_name_words = set(str(row["Part name"]).lower().split())
+        title_words = clean_and_tokenize(row["Title"])
+        part_name_words = clean_and_tokenize(row["Part name"])
 
-        # If any overlap in words between user input and title/part name
         if user_words & title_words or user_words & part_name_words:
             matches.append(row["Description"])
 
