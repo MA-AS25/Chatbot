@@ -15,20 +15,20 @@ if "messages" not in st.session_state:
 # Function to get response from Excel
 def get_response(user_input):
     user_input_lower = user_input.lower()
-
-    # Tokenize user input into words
-    user_words = set(user_input_lower.split())
+    matches = []
 
     for _, row in df.iterrows():
-        title_words = set(str(row["Title"]).strip().lower().split())
-        part_words = set(str(row["Part name"]).strip().lower().split())
+        title = str(row["Title"]).strip().lower()
+        part_name = str(row["Part name"]).strip().lower()
 
-        # Check if any word in title or part name is in user input
-        if user_words & title_words or user_words & part_words:
-            return row["Description"]
+        if any(word in title for word in user_input_lower.split()) or any(word in part_name for word in user_input_lower.split()):
+            matches.append(row["Description"])
 
-    return ("Sorry, I couldn't find any specification for that part. "
-            "Which part of the 3D printer are you interested in?")
+    if matches:
+        return "\n\n".join(matches)
+    else:
+        return ("Sorry, I couldn't find any specification for that part. "
+                "Which part of the 3D printer are you interested in?")
 
 # Chat input using a form
 with st.form("chat_form", clear_on_submit=True):
