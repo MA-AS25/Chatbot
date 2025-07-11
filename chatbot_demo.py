@@ -14,14 +14,15 @@ if "messages" not in st.session_state:
 
 # Function to get response from Excel
 def get_response(user_input):
-    user_input_lower = user_input.lower()
+    user_words = set(user_input.lower().split())
     matches = []
 
     for _, row in df.iterrows():
-        title = str(row["Title"]).strip().lower()
-        part_name = str(row["Part name"]).strip().lower()
+        title_words = set(str(row["Title"]).lower().split())
+        part_name_words = set(str(row["Part name"]).lower().split())
 
-        if any(word in title for word in user_input_lower.split()) or any(word in part_name for word in user_input_lower.split()):
+        # If any overlap in words between user input and title/part name
+        if user_words & title_words or user_words & part_name_words:
             matches.append(row["Description"])
 
     if matches:
