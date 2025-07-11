@@ -28,20 +28,14 @@ for message in st.session_state.messages:
         st.markdown(f"**🧑 You:** {message['content']}")
     else:
         st.markdown(f"**🤖 Bot:** {message['content']}")
+        
+# Chat input using a form (to avoid rerun conflicts)
+with st.form("chat_form", clear_on_submit=True):
+    user_input = st.text_input("Type your message here:")
+    submitted = st.form_submit_button("Send")
 
-# User input box
-user_input = st.text_input("Type your message here:", key="input")
-
-# If user submits a message
-if user_input:
-    # Add user message to chat history
+# When user submits a message
+if submitted and user_input:
     st.session_state.messages.append({"role": "user", "content": user_input})
-
-    # Get bot response
     response = get_response(user_input)
-
-    # Add bot response to chat history
     st.session_state.messages.append({"role": "bot", "content": response})
-
-    # Rerun to update chat history display immediately
-    st.experimental_rerun()
