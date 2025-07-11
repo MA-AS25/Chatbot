@@ -20,8 +20,8 @@ def get_response(user_input):
     user_words = set(user_input_lower.split())
 
     for _, row in df.iterrows():
-        title_words = set(str(row["Title"]).lower().split())
-        part_words = set(str(row["Part name"]).lower().split())
+        title_words = set(str(row["Title"]).strip().lower().split())
+        part_words = set(str(row["Part name"]).strip().lower().split())
 
         # Check if any word in title or part name is in user input
         if user_words & title_words or user_words & part_words:
