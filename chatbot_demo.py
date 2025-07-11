@@ -14,11 +14,19 @@ if "messages" not in st.session_state:
 
 # Function to get response from Excel
 def get_response(user_input):
+    user_input_lower = user_input.lower()
+
+    # Tokenize user input into words
+    user_words = set(user_input_lower.split())
+
     for _, row in df.iterrows():
-        title = row["Title"].lower()
-        part_name = row["Part name"].lower()
-        if title in user_input.lower() or part_name in user_input.lower():
+        title_words = set(str(row["Title"]).lower().split())
+        part_words = set(str(row["Part name"]).lower().split())
+
+        # Check if any word in title or part name is in user input
+        if user_words & title_words or user_words & part_words:
             return row["Description"]
+
     return ("Sorry, I couldn't find any specification for that part. "
             "Which part of the 3D printer are you interested in?")
 
