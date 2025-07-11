@@ -25,9 +25,9 @@ def get_response(user_input):
 # Display chat messages from history
 for message in st.session_state.messages:
     if message["role"] == "user":
-        st.markdown(f"**🧑 You:** {message['content']}")
+        st.markdown(f"**You:** {message['content']}")
     else:
-        st.markdown(f"**🤖 Bot:** {message['content']}")
+        st.markdown(f"**Bot:** {message['content']}")
         
 # Chat input using a form (to avoid rerun conflicts)
 with st.form("chat_form", clear_on_submit=True):
