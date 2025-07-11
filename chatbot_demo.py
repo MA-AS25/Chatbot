@@ -6,10 +6,13 @@ df = pd.read_excel("List.xlsx")
 
 # Title of the app
 st.title("3D Printer requirement Chatbot Demo")
+st.write("Ask me about a 3D printer part or function for which you would like to know the requirements:")
 
-# User input
-user_input = st.text_input("Ask me about a 3D printer part or function for which you would like to know the requirements:")
+# Initialize chat history in session state
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
+# Function to get response from Excel
 def get_response(user_input):
     for _, row in df.iterrows():
         title = row["Title"].lower()
@@ -19,7 +22,29 @@ def get_response(user_input):
     return ("Sorry, I couldn't find any specification for that part. "
             "Which part of the 3D printer are you interested in?")
 
-# Respond when user submits input
+# Display chat messages from history
+for message in st.session_state.messages:
+    if message["role"] == "user":
+        st.markdown(f"**🧑 You:** {message['content']}")
+    else:
+        st.markdown(f"**🤖 Bot:** {message['content']}")
+
+# User input box
+user_input = st.text_input("Type your message here:", key="input")
+
+# If user submits a message
 if user_input:
+    # Add user message to chat history
+    st.session_state.messages.append({"role": "user", "content": user_input})
+
+    # Get bot response
     response = get_response(user_input)
-    st.write("💬 " + response)
+
+    # Add bot response to chat history
+    st.session_state.messages.append({"role": "bot", "content": response})
+
+    # Clear input box after submitting
+    st.session_state.input = ""
+
+    # Rerun to update chat history display immediately
+    st.experimental_rerun()
