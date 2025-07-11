@@ -30,14 +30,7 @@ def get_response(user_input):
     return ("Sorry, I couldn't find any specification for that part. "
             "Which part of the 3D printer are you interested in?")
 
-# Display chat messages from history
-for message in st.session_state.messages:
-    if message["role"] == "user":
-        st.markdown(f"**You:** {message['content']}")
-    else:
-        st.markdown(f"**Bot:** {message['content']}")
-        
-# Chat input using a form (to avoid rerun conflicts)
+# Chat input using a form
 with st.form("chat_form", clear_on_submit=True):
     user_input = st.text_input("Type your message here:")
     submitted = st.form_submit_button("Send")
@@ -50,3 +43,10 @@ if submitted and user_input:
     # Get bot response and add to history
     response = get_response(user_input)
     st.session_state.messages.append({"role": "bot", "content": response})
+    
+# Display chat messages from history
+for message in st.session_state.messages:
+    if message["role"] == "user":
+        st.markdown(f"**You:** {message['content']}")
+    else:
+        st.markdown(f"**Bot:** {message['content']}")
