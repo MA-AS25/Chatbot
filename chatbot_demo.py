@@ -43,8 +43,5 @@ if user_input:
     # Add bot response to chat history
     st.session_state.messages.append({"role": "bot", "content": response})
 
-    # Clear input box after submitting
-    st.session_state.input = ""
-
     # Rerun to update chat history display immediately
     st.experimental_rerun()
