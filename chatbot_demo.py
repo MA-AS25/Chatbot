@@ -42,8 +42,11 @@ with st.form("chat_form", clear_on_submit=True):
     user_input = st.text_input("Type your message here:")
     submitted = st.form_submit_button("Send")
 
-# When user submits a message
+# If user submits a message
 if submitted and user_input:
+    # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": user_input})
+
+    # Get bot response and add to history
     response = get_response(user_input)
     st.session_state.messages.append({"role": "bot", "content": response})
